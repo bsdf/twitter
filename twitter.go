@@ -2,9 +2,9 @@ package twitter
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
-	"fmt"
 )
 
 const (
@@ -85,40 +85,47 @@ type User struct {
 	Location       *string
 }
 
-func GetPublicTimeline() []Tweet {
-	body := getResponseBody(publicTimelineURL)
+func GetPublicTimeline() ([]Tweet, error) {
+	body, err := getResponseBody(publicTimelineURL)
+	if err != nil {
+		return nil, err
+	}
 
 	var tweets []Tweet
+	err = json.Unmarshal(body, &tweets)
+	if err != nil {
+		return nil, err
+	}
 
-	err := json.Unmarshal(body, &tweets)
-	checkError(err)
-
-	return tweets
+	return tweets, nil
 }
 
-func GetUserTimeline(screenName string) []Tweet {
+func GetUserTimeline(screenName string) ([]Tweet, error) {
 	url := fmt.Sprintf(userStatusURL, screenName)
-	body := getResponseBody(url)
+	body, err := getResponseBody(url)
+	if err != nil {
+		return nil, err
+	}
+
 	var tweets []Tweet
+	err = json.Unmarshal(body, &tweets)
+	if err != nil {
+		return nil, err
+	}
 
-	err := json.Unmarshal(body, &tweets)
-	checkError(err)
-
-	return tweets
+	return tweets, nil
 }
 
-func getResponseBody(url string) []byte {
+func getResponseBody(url string) ([]byte, error) {
 	resp, err := http.Get(url)
-	checkError(err)
+	if err != nil {
+		return nil, err
+	}
 
 	body, err := ioutil.ReadAll(resp.Body)
-	checkError(err)
-
-	return body
-}
-
-func checkError(err error) {
 	if err != nil {
-		panic(err.Error())
+		return nil, err
 	}
+
+	return body, nil
 }

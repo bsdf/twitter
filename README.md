@@ -11,7 +11,11 @@ import (
 )
 
 func main() {
-	tweets := twitter.GetUserTimeline("bsdf")
+	tweets, err := twitter.GetUserTimeline("bsdf")
+    if err != nil {
+		fmt.Println(err.Error())
+        return
+    }
 
 	for _, tweet := range tweets {
 		fmt.Printf("%s (%s):\n", *tweet.User.Name, *tweet.User.ScreenName)
