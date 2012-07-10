@@ -10,6 +10,7 @@ import (
 	"net/url"
 	"regexp"
 	"sort"
+	"strings"
 	"time"
 )
 
@@ -40,6 +41,23 @@ func (t *Twitter) generateOAuthHeader() string {
 // Generates an OAuth signature base string to be signed
 func (t *Twitter) generateSignatureBase(m RestMethod) string {
 	var buffer bytes.Buffer
+
+	splitUrl := strings.Split(m.Url, "?")
+	url := splitUrl[0]
+
+	if len(splitUrl) == 2 {
+		// parse parameters from query string
+		queryString := splitUrl[1]
+		params := strings.Split(queryString, "&")
+
+		for _, param := range params {
+			splitParam := strings.Split(param, "=")
+			key := splitParam[0]
+			val := splitParam[1]
+
+			m.Params[key] = val
+		}
+	}
 
 	// write method and url to buffer
 	buffer.WriteString(m.Method + "&")
