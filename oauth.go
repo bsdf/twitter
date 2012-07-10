@@ -43,20 +43,21 @@ func (t *Twitter) generateSignatureBase(m RestMethod) string {
 
 	// write method and url to buffer
 	buffer.WriteString(m.Method + "&")
-	buffer.WriteString(encode(m.Url) + "&")
+	buffer.WriteString(url + "&")
 
 	// sort map keys
 	sortedKeys := sortMapKeys(m.Params)
 
 	// write each parameter to buffer
 	for _, v := range sortedKeys {
-		buffer.WriteString(encode(fmt.Sprintf("%s=%s&", v, m.Params[v])))
+		buffer.WriteString(fmt.Sprintf("%s=%s&", v, m.Params[v]))
 	}
 
-	buffer.WriteString(encode(m.Data))
+	// append Data to buffer
+	buffer.WriteString(m.Data)
 
-	// return string
-	return buffer.String()
+	// return url encoded string
+	return encode(buffer.String())
 }
 
 // Returns []string of alphabetically sorted map keys
