@@ -5,7 +5,6 @@ import (
 	"testing"
 )
 
-func TestGenerateOAuthHeader(t *testing.T) {
-	header := OAuthHeader()
-	fmt.Println(header)
+func Test(t *testing.T) {
+	fmt.Print()
 }
