@@ -3,7 +3,7 @@ package twitter
 type Tweet struct {
 	Contributors        []Contributor
 	CreatedAt           string `json:"created_at"`
-	Entities            []Entity
+	Entities            Entities
 	Id                  int64
 	IdStr               string `json:"id_str"`
 	InReplyToScreenName string `json:"in_reply_to_screen_name"`
@@ -24,7 +24,7 @@ type Contributor struct {
 	ScreenName string `json:"screen_name"`
 }
 
-type Entity struct {
+type Entities struct {
 	Hashtags     []HashTag
 	Media        []Media
 	Urls         []URL
