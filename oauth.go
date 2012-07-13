@@ -28,12 +28,17 @@ type RestMethod struct {
 }
 
 // Generates OAuth http header
-func (t *Twitter) generateOAuthHeader() string {
+func (t *Twitter) generateOAuthHeader(m RestMethod) string {
+	base := t.generateSignatureBase(m)
+	sig := t.generateOAuthSignature(base)
+	nonce := getNonce()
+	stamp := fmt.Sprintf("%d", time.Now().Unix())
+
 	return fmt.Sprintf(authHeaderString,
 		encode(t.consumerKey),
-		getNonce(),
-		encode(t.generateOAuthSignature("hello")),
-		fmt.Sprintf("%d", time.Now().Unix()),
+		nonce,
+		encode(sig),
+		stamp,
 		encode(t.oauthToken),
 	)
 }
@@ -61,21 +66,21 @@ func (t *Twitter) generateSignatureBase(m RestMethod) string {
 
 	// write method and url to buffer
 	buffer.WriteString(m.Method + "&")
-	buffer.WriteString(url + "&")
+	buffer.WriteString(encode(url) + "&")
 
 	// sort map keys
 	sortedKeys := sortMapKeys(m.Params)
 
 	// write each parameter to buffer
 	for _, v := range sortedKeys {
-		buffer.WriteString(fmt.Sprintf("%s=%s&", v, m.Params[v]))
+		buffer.WriteString(encode(fmt.Sprintf("%s=%s&", v, m.Params[v])))
 	}
 
 	// append Data to buffer
-	buffer.WriteString(m.Data)
+	buffer.WriteString(encode(m.Data))
 
-	// return url encoded string
-	return encode(buffer.String())
+	// return url
+	return buffer.String()
 }
 
 // Returns []string of alphabetically sorted map keys
