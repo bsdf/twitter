@@ -20,6 +20,7 @@ func TestSignature(t *testing.T) {
 		"oauth_token":            tw.oauthToken,
 		"oauth_version":          "1.0",
 	}
+
 	method := RestMethod{
 		Url:    "https://api.twitter.com/1/statuses/update.json?include_entities=true",
 		Method: "POST",
@@ -31,6 +32,6 @@ func TestSignature(t *testing.T) {
 	sig := tw.generateOAuthSignature(base)
 
 	if sig != expected {
-		t.Error("Signature: %s did not match expected: %s", sig, expected)
+		t.Errorf("Signature: %s did not match expected: %s", sig, expected)
 	}
 }
