@@ -31,8 +31,9 @@ type RestMethod struct {
 func (t *Twitter) generateOAuthHeader(m RestMethod) string {
 	base := t.generateSignatureBase(m)
 	sig := t.generateOAuthSignature(base)
-	nonce := getNonce()
-	stamp := fmt.Sprintf("%d", time.Now().Unix())
+
+	nonce := m.Params["oauth_nonce"]
+	stamp := m.Params["oauth_timestamp"]
 
 	return fmt.Sprintf(authHeaderString,
 		encode(t.consumerKey),
