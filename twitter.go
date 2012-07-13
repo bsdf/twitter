@@ -26,6 +26,7 @@ var (
 	commaRegexp = regexp.MustCompile(`,(})`)
 )
 
+// Returns Twitter's public timeline
 func (t *Twitter) GetPublicTimeline() ([]Tweet, error) {
 	body, err := getResponseBody(publicTimelineURL)
 	if err != nil {
@@ -41,6 +42,7 @@ func (t *Twitter) GetPublicTimeline() ([]Tweet, error) {
 	return tweets, nil
 }
 
+// Retrieves a user's timeline
 func (t *Twitter) GetUserTimeline(screenName string) ([]Tweet, error) {
 	url := fmt.Sprintf(userStatusURL, screenName)
 	body, err := getResponseBody(url)
