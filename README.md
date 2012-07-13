@@ -18,8 +18,8 @@ func main() {
     }
 
 	for _, tweet := range tweets {
-		fmt.Printf("%s (%s):\n", *tweet.User.Name, *tweet.User.ScreenName)
-		fmt.Printf("%s\n", *tweet.Text)
+		fmt.Printf("%s (%s):\n", tweet.User.Name, tweet.User.ScreenName)
+		fmt.Printf("%s\n", tweet.Text)
 	}
 }
 ```

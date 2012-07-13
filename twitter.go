@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"regexp"
 )
 
 const (
@@ -18,6 +19,12 @@ type Twitter struct {
 	oauthToken       string
 	oauthTokenSecret string
 }
+
+// Sanitizing Regular Expressions
+var (
+	nullRegexp  = regexp.MustCompile(`"[^"]+?"\s*?:\s*?null(\s*?,)?`)
+	commaRegexp = regexp.MustCompile(`,(})`)
+)
 
 func (t *Twitter) GetPublicTimeline() ([]Tweet, error) {
 	body, err := getResponseBody(publicTimelineURL)
@@ -60,6 +67,12 @@ func getResponseBody(url string) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	// sanitize json
+	// remove nulls
+	body = nullRegexp.ReplaceAll(body, nil)
+	// remove any trailing commas
+	body = commaRegexp.ReplaceAll(body, []byte("$1"))
 
 	return body, nil
 }

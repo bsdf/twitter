@@ -26,7 +26,7 @@ func TestBadUsername(t *testing.T) {
 func TestUserTimeline(t *testing.T) {
 	tweets, err := tw.GetUserTimeline("bsdf")
 	if err != nil {
-		t.Error("Error retrieving user timeline")
+		t.Error("Error retrieving user timeline:", err.Error())
 		return
 	}
 	if len(tweets) < 1 {
@@ -42,7 +42,7 @@ func TestPublicTimeline(t *testing.T) {
 		return
 	}
 	if len(tweets) < 1 {
-		t.Error("No tweets returned from public timeline")
+		t.Error("No tweets returned from public timeline:", err.Error())
 		return
 	}
 }
@@ -51,7 +51,7 @@ func TestUserInfo(t *testing.T) {
 	const expected = "bsdf"
 	tweets, err := tw.GetUserTimeline(expected)
 	if err != nil {
-		t.Error("Error retrieving user timeline")
+		t.Error("Error retrieving user timeline:", err.Error())
 		return
 	}
 
@@ -61,7 +61,7 @@ func TestUserInfo(t *testing.T) {
 	}
 
 	tweet := tweets[0]
-	username := *tweet.User.ScreenName
+	username := tweet.User.ScreenName
 	if username != expected {
 		t.Errorf("Expected username \"%s\", got \"%s\"", expected, username)
 		return
