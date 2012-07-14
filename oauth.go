@@ -73,14 +73,8 @@ func (t *Twitter) generateSignatureBase(m *RestMethod) string {
 	if len(splitUrl) == 2 {
 		// parse parameters from query string
 		queryString := splitUrl[1]
-		params := strings.Split(queryString, "&")
-
-		for _, param := range params {
-			splitParam := strings.Split(param, "=")
-			key := splitParam[0]
-			val := splitParam[1]
-
-			m.Params[key] = val
+		for k, v := range mapFromQueryString(queryString) {
+			m.Params[k] = v
 		}
 	}
 
@@ -108,6 +102,21 @@ func (t *Twitter) generateSignatureBase(m *RestMethod) string {
 	}
 	// return signature base
 	return out
+}
+
+// Turns url-style query string into a map
+func mapFromQueryString(queryString string) map[string]string {
+	m := make(map[string]string)
+	params := strings.Split(queryString, "&")
+
+	for _, param := range params {
+		splitParam := strings.Split(param, "=")
+		key := splitParam[0]
+		val := splitParam[1]
+
+		m[key] = val
+	}
+	return m
 }
 
 // Returns []string of alphabetically sorted map keys
