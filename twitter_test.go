@@ -1,19 +1,49 @@
 package twitter
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"os"
 	"testing"
 )
 
-var tw = Twitter{
-	consumerKey:      "xvz1evFS4wEEPTGEFPHBog",
-	consumerSecret:   "kAcSOqF21Fu85e7zjz7ZN2U4ZRhfV3WpwPAoE3Z7kBw",
-	oauthToken:       "370773112-GmHxMAgYyLbNEtIKZeRNFsMKPR9EyMZeS9weJAEb",
-	oauthTokenSecret: "LswwdoUaIvS8ltyTt5jkRh4J50vUPVVHtR2YPi5kE",
+type Config struct {
+	ConsumerKey      string
+	ConsumerSecret   string
+	OAuthToken       string
+	OAuthTokenSecret string
 }
 
+var (
+	config Config
+	tw     Twitter
+)
+
 func init() {
-	fmt.Print()
+	loadConfiguration()
+
+	tw = Twitter{
+		consumerKey:      config.ConsumerKey,
+		consumerSecret:   config.ConsumerSecret,
+		oauthToken:       config.OAuthToken,
+		oauthTokenSecret: config.OAuthTokenSecret,
+	}
+}
+
+func loadConfiguration() {
+	file, err := os.Open(".config")
+	if err != nil {
+		fmt.Println("Error loading config:", err.Error())
+		os.Exit(1)
+	}
+
+	body, err := ioutil.ReadAll(file)
+	err = json.Unmarshal(body, &config)
+	if err != nil {
+		fmt.Println("Error loading config:", err.Error())
+		os.Exit(1)
+	}
 }
 
 func TestBadUsername(t *testing.T) {
@@ -69,7 +99,7 @@ func TestUserInfo(t *testing.T) {
 }
 
 func TestTwitterType(t *testing.T) {
-	const expected = "xvz1evFS4wEEPTGEFPHBog"
+	var expected = config.ConsumerKey
 
 	if tw.consumerKey != expected {
 		t.Error("Twitter object was not created correctly")
