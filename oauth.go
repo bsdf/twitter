@@ -7,6 +7,8 @@ import (
 	"crypto/sha1"
 	"encoding/base64"
 	"fmt"
+	"io/ioutil"
+	"net/http"
 	"net/url"
 	"regexp"
 	"sort"
@@ -141,4 +143,30 @@ func getNonce() string {
 	rand.Read(bytes)
 	enc := base64.StdEncoding.EncodeToString(bytes)
 	return nonceRegexp.ReplaceAllString(enc, "")
+}
+
+func (t *Twitter) sendRestRequest(m *RestMethod) ([]byte, error) {
+	client := &http.Client{}
+	req, _ := http.NewRequest(m.Method, m.Url, strings.NewReader(m.Data))
+	header := t.generateOAuthHeader(m)
+
+	req.Header.Add("Authorization", header)
+
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	// sanitize json
+	// remove nulls
+	body = nullRegexp.ReplaceAll(body, nil)
+	// remove any trailing commas
+	body = commaRegexp.ReplaceAll(body, []byte("$1"))
+
+	return body, nil
 }
