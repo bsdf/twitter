@@ -51,11 +51,11 @@ func (t *Twitter) generateSignatureBase(m RestMethod) string {
 	// create OAuth params
 	if m.Params == nil {
 		m.Params = map[string]string{
-			"oauth_consumer_key":     tw.consumerKey,
+			"oauth_consumer_key":     t.consumerKey,
 			"oauth_nonce":            getNonce(),
 			"oauth_signature_method": "HMAC-SHA1",
 			"oauth_timestamp":        fmt.Sprintf("%d", time.Now().Unix()),
-			"oauth_token":            tw.oauthToken,
+			"oauth_token":            t.oauthToken,
 			"oauth_version":          "1.0",
 		}
 	}
