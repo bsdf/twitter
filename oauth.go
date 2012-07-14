@@ -94,11 +94,18 @@ func (t *Twitter) generateSignatureBase(m *RestMethod) string {
 		buffer.WriteString(encode(fmt.Sprintf("%s=%s&", v, m.Params[v])))
 	}
 
-	// append Data to buffer
-	buffer.WriteString(encode(m.Data))
-
-	// return url
-	return buffer.String()
+	var out string
+	if m.Data != "" {
+		// append Data to buffer
+		buffer.WriteString(encode(m.Data))
+		out = buffer.String()
+	} else {
+		// remove trailing %26 (%&)
+		out = buffer.String()
+		out = out[:len(out)-3]
+	}
+	// return signature base
+	return out
 }
 
 // Returns []string of alphabetically sorted map keys
