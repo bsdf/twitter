@@ -18,7 +18,12 @@ const (
 	authHeaderString = `OAuth oauth_consumer_key="%s", oauth_nonce="%s", oauth_signature="%s", oauth_signature_method="HMAC-SHA1", oauth_timestamp="%s", oauth_token="%s", oauth_version="1.0"`
 )
 
-var nonceRegexp, _ = regexp.Compile("[^a-zA-Z0-9]")
+// Sanitizing Regular Expressions
+var (
+	nonceRegexp = regexp.MustCompile("[^a-zA-Z0-9]")
+	nullRegexp  = regexp.MustCompile(`"[^"]+?"\s*?:\s*?null(\s*?,)?`)
+	commaRegexp = regexp.MustCompile(`,(})`)
+)
 
 type RestMethod struct {
 	Url    string
@@ -28,7 +33,7 @@ type RestMethod struct {
 }
 
 // Generates OAuth http header
-func (t *Twitter) generateOAuthHeader(m RestMethod) string {
+func (t *Twitter) generateOAuthHeader(m *RestMethod) string {
 	base := t.generateSignatureBase(m)
 	sig := t.generateOAuthSignature(base)
 
@@ -45,7 +50,7 @@ func (t *Twitter) generateOAuthHeader(m RestMethod) string {
 }
 
 // Generates an OAuth signature base string to be signed
-func (t *Twitter) generateSignatureBase(m RestMethod) string {
+func (t *Twitter) generateSignatureBase(m *RestMethod) string {
 	var buffer bytes.Buffer
 
 	// create OAuth params

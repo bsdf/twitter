@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"regexp"
 )
 
 const (
@@ -19,12 +18,6 @@ type Twitter struct {
 	oauthToken       string
 	oauthTokenSecret string
 }
-
-// Sanitizing Regular Expressions
-var (
-	nullRegexp  = regexp.MustCompile(`"[^"]+?"\s*?:\s*?null(\s*?,)?`)
-	commaRegexp = regexp.MustCompile(`,(})`)
-)
 
 // Returns Twitter's public timeline
 func (t *Twitter) GetPublicTimeline() ([]Tweet, error) {

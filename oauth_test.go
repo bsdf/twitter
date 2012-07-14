@@ -28,7 +28,7 @@ func TestSignature(t *testing.T) {
 		Data:   "status=Hello%20Ladies%20%2B%20Gentlemen%2C%20a%20signed%20OAuth%20request%21",
 	}
 
-	base := tw.generateSignatureBase(method)
+	base := tw.generateSignatureBase(&method)
 	sig := tw.generateOAuthSignature(base)
 
 	if sig != expected {
