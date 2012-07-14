@@ -14,10 +14,6 @@ import (
 	"time"
 )
 
-const (
-	authHeaderString = `OAuth oauth_consumer_key="%s", oauth_nonce="%s", oauth_signature="%s", oauth_signature_method="HMAC-SHA1", oauth_timestamp="%s", oauth_token="%s", oauth_version="1.0"`
-)
-
 // Sanitizing Regular Expressions
 var (
 	nonceRegexp = regexp.MustCompile("[^a-zA-Z0-9]")
@@ -37,16 +33,20 @@ func (t *Twitter) generateOAuthHeader(m *RestMethod) string {
 	base := t.generateSignatureBase(m)
 	sig := t.generateOAuthSignature(base)
 
-	nonce := m.Params["oauth_nonce"]
-	stamp := m.Params["oauth_timestamp"]
+	m.Params["oauth_signature"] = sig
 
-	return fmt.Sprintf(authHeaderString,
-		encode(t.consumerKey),
-		nonce,
-		encode(sig),
-		stamp,
-		encode(t.oauthToken),
-	)
+	sortedKeys := sortMapKeys(m.Params)
+
+	i := 0
+	var params = make([]string, len(m.Params))
+	for _, v := range sortedKeys {
+		if v[:6] == "oauth_" {
+			params[i] = fmt.Sprintf(`%s="%s"`, v, encode(m.Params[v]))
+			i++
+		}
+	}
+
+	return "OAuth " + strings.Join(params[:i], ", ")
 }
 
 // Generates an OAuth signature base string to be signed
