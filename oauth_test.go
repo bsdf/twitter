@@ -124,9 +124,9 @@ func TestFollow(t *testing.T) {
 	}
 }
 
-func TestUnFollow(t *testing.T) {
+func TestUnfollow(t *testing.T) {
 	userName := "bsdf"
-	user, err := tw.UnFollow(userName)
+	user, err := tw.Unfollow(userName)
 	if err != nil {
 		t.Error("Error unfollowing user:", err.Error())
 		return

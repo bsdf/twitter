@@ -52,6 +52,77 @@ func (t *Twitter) GetUserTimeline(screenName string) ([]Tweet, error) {
 	return tweets, nil
 }
 
+// Send a tweet
+// Returns the Tweet if successful, error if unsuccessful
+func (t *Twitter) Tweet(message string) (tweet Tweet, err error) {
+	data := fmt.Sprintf("status=%s", encode(message))
+
+	method := &RestMethod{
+		Url:    "https://api.twitter.com/1/statuses/update.json",
+		Method: "POST",
+		Data:   data,
+	}
+
+	body, err := t.sendRestRequest(method)
+	if err != nil {
+		fmt.Println(err.Error())
+		return tweet, err
+	}
+
+	err = json.Unmarshal(body, &tweet)
+	if err != nil {
+		return tweet, err
+	}
+
+	return tweet, err
+}
+
+// Follow a user
+// Returns the User if successful, error if unsuccessful
+func (t *Twitter) Follow(username string) (user User, err error) {
+	method := &RestMethod{
+		Url:    "https://api.twitter.com/1/friendships/create.json",
+		Method: "POST",
+		Data:   fmt.Sprintf("screen_name=%s", encode(username)),
+	}
+
+	body, err := t.sendRestRequest(method)
+	if err != nil {
+		fmt.Println(err.Error())
+		return user, err
+	}
+
+	err = json.Unmarshal(body, &user)
+	if err != nil {
+		return user, err
+	}
+
+	return user, err
+}
+
+// Unfollow a user
+// Returns the User if successful, error if unsuccessful
+func (t *Twitter) Unfollow(username string) (user User, err error) {
+	method := &RestMethod{
+		Url:    "https://api.twitter.com/1/friendships/destroy.json",
+		Method: "POST",
+		Data:   fmt.Sprintf("screen_name=%s", encode(username)),
+	}
+
+	body, err := t.sendRestRequest(method)
+	if err != nil {
+		fmt.Println(err.Error())
+		return user, err
+	}
+
+	err = json.Unmarshal(body, &user)
+	if err != nil {
+		return user, err
+	}
+
+	return user, err
+}
+
 func getResponseBody(url string) ([]byte, error) {
 	resp, err := http.Get(url)
 	if err != nil {
