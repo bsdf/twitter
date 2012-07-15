@@ -14,18 +14,18 @@ func TestSignature(t *testing.T) {
 	const expected = "tnnArxj06cWHq44gCs1OSKk/jLY="
 
 	var tt = Twitter{
-		consumerKey:      "xvz1evFS4wEEPTGEFPHBog",
-		consumerSecret:   "kAcSOqF21Fu85e7zjz7ZN2U4ZRhfV3WpwPAoE3Z7kBw",
-		oauthToken:       "370773112-GmHxMAgYyLbNEtIKZeRNFsMKPR9EyMZeS9weJAEb",
-		oauthTokenSecret: "LswwdoUaIvS8ltyTt5jkRh4J50vUPVVHtR2YPi5kE",
+		ConsumerKey:      "xvz1evFS4wEEPTGEFPHBog",
+		ConsumerSecret:   "kAcSOqF21Fu85e7zjz7ZN2U4ZRhfV3WpwPAoE3Z7kBw",
+		OAuthToken:       "370773112-GmHxMAgYyLbNEtIKZeRNFsMKPR9EyMZeS9weJAEb",
+		OAuthTokenSecret: "LswwdoUaIvS8ltyTt5jkRh4J50vUPVVHtR2YPi5kE",
 	}
 
 	params := map[string]string{
-		"oauth_consumer_key":     tt.consumerKey,
+		"oauth_consumer_key":     tt.ConsumerKey,
 		"oauth_nonce":            "kYjzVBB8Y0ZFabxSWbWovY3uYSQ2pTgmZeNu2VS4cg",
 		"oauth_signature_method": "HMAC-SHA1",
 		"oauth_timestamp":        "1318622958",
-		"oauth_token":            tt.oauthToken,
+		"oauth_token":            tt.OAuthToken,
 		"oauth_version":          "1.0",
 	}
 
@@ -48,18 +48,18 @@ func TestOAuthHeader(t *testing.T) {
 	const expected = `OAuth oauth_consumer_key="xvz1evFS4wEEPTGEFPHBog", oauth_nonce="kYjzVBB8Y0ZFabxSWbWovY3uYSQ2pTgmZeNu2VS4cg", oauth_signature="tnnArxj06cWHq44gCs1OSKk%2FjLY%3D", oauth_signature_method="HMAC-SHA1", oauth_timestamp="1318622958", oauth_token="370773112-GmHxMAgYyLbNEtIKZeRNFsMKPR9EyMZeS9weJAEb", oauth_version="1.0"`
 
 	var tt = Twitter{
-		consumerKey:      "xvz1evFS4wEEPTGEFPHBog",
-		consumerSecret:   "kAcSOqF21Fu85e7zjz7ZN2U4ZRhfV3WpwPAoE3Z7kBw",
-		oauthToken:       "370773112-GmHxMAgYyLbNEtIKZeRNFsMKPR9EyMZeS9weJAEb",
-		oauthTokenSecret: "LswwdoUaIvS8ltyTt5jkRh4J50vUPVVHtR2YPi5kE",
+		ConsumerKey:      "xvz1evFS4wEEPTGEFPHBog",
+		ConsumerSecret:   "kAcSOqF21Fu85e7zjz7ZN2U4ZRhfV3WpwPAoE3Z7kBw",
+		OAuthToken:       "370773112-GmHxMAgYyLbNEtIKZeRNFsMKPR9EyMZeS9weJAEb",
+		OAuthTokenSecret: "LswwdoUaIvS8ltyTt5jkRh4J50vUPVVHtR2YPi5kE",
 	}
 
 	params := map[string]string{
-		"oauth_consumer_key":     tt.consumerKey,
+		"oauth_consumer_key":     tt.ConsumerKey,
 		"oauth_nonce":            "kYjzVBB8Y0ZFabxSWbWovY3uYSQ2pTgmZeNu2VS4cg",
 		"oauth_signature_method": "HMAC-SHA1",
 		"oauth_timestamp":        "1318622958",
-		"oauth_token":            tt.oauthToken,
+		"oauth_token":            tt.OAuthToken,
 		"oauth_version":          "1.0",
 	}
 
@@ -93,8 +93,8 @@ func TestTweet(t *testing.T) {
 
 func TestRequestToken(t *testing.T) {
 	var tt = Twitter{
-		consumerKey:    config.ConsumerKey,
-		consumerSecret: config.ConsumerSecret,
+		ConsumerKey:    config.ConsumerKey,
+		ConsumerSecret: config.ConsumerSecret,
 	}
 
 	err := tt.requestToken()
@@ -104,7 +104,7 @@ func TestRequestToken(t *testing.T) {
 		return
 	}
 
-	if tt.oauthToken == "" || tt.oauthTokenSecret == "" {
+	if tt.OAuthToken == "" || tt.OAuthTokenSecret == "" {
 		t.Error("Request token succeeded, but no tokens returned")
 		return
 	}

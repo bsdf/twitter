@@ -65,11 +65,11 @@ func (t *Twitter) generateSignatureBase(m *RestMethod) string {
 	// create OAuth params
 	if m.Params == nil {
 		m.Params = map[string]string{
-			"oauth_consumer_key":     t.consumerKey,
+			"oauth_consumer_key":     t.ConsumerKey,
 			"oauth_nonce":            getNonce(),
 			"oauth_signature_method": "HMAC-SHA1",
 			"oauth_timestamp":        fmt.Sprintf("%d", time.Now().Unix()),
-			"oauth_token":            t.oauthToken,
+			"oauth_token":            t.OAuthToken,
 			"oauth_version":          "1.0",
 		}
 	}
@@ -141,7 +141,7 @@ func sortMapKeys(m map[string]string) []string {
 // Generates an OAuth signature using signatureBase
 // and secret keys
 func (t *Twitter) generateOAuthSignature(signatureBase string) string {
-	signingKey := fmt.Sprintf("%s&%s", t.consumerSecret, t.oauthTokenSecret)
+	signingKey := fmt.Sprintf("%s&%s", t.ConsumerSecret, t.OAuthTokenSecret)
 	hmac := hmac.New(sha1.New, []byte(signingKey))
 
 	hmac.Write([]byte(signatureBase))
@@ -263,7 +263,7 @@ func (t *Twitter) UnFollow(username string) (user User, err error) {
 
 func (t *Twitter) requestToken() error {
 	params := map[string]string{
-		"oauth_consumer_key":     t.consumerKey,
+		"oauth_consumer_key":     t.ConsumerKey,
 		"oauth_nonce":            getNonce(),
 		"oauth_signature_method": "HMAC-SHA1",
 		"oauth_timestamp":        fmt.Sprintf("%d", time.Now().Unix()),
@@ -287,8 +287,8 @@ func (t *Twitter) requestToken() error {
 
 	m := mapFromQueryString(strBody)
 
-	t.oauthToken = m["oauth_token"]
-	t.oauthTokenSecret = m["oauth_token_secret"]
+	t.OAuthToken = m["oauth_token"]
+	t.OAuthTokenSecret = m["oauth_token_secret"]
 
 	return nil
 }

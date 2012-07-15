@@ -24,10 +24,10 @@ func init() {
 	loadConfiguration()
 
 	tw = Twitter{
-		consumerKey:      config.ConsumerKey,
-		consumerSecret:   config.ConsumerSecret,
-		oauthToken:       config.OAuthToken,
-		oauthTokenSecret: config.OAuthTokenSecret,
+		ConsumerKey:      config.ConsumerKey,
+		ConsumerSecret:   config.ConsumerSecret,
+		OAuthToken:       config.OAuthToken,
+		OAuthTokenSecret: config.OAuthTokenSecret,
 	}
 }
 
@@ -101,7 +101,7 @@ func TestUserInfo(t *testing.T) {
 func TestTwitterType(t *testing.T) {
 	var expected = config.ConsumerKey
 
-	if tw.consumerKey != expected {
+	if tw.ConsumerKey != expected {
 		t.Error("Twitter object was not created correctly")
 	}
 }

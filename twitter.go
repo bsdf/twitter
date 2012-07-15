@@ -13,10 +13,10 @@ const (
 )
 
 type Twitter struct {
-	consumerKey      string
-	consumerSecret   string
-	oauthToken       string
-	oauthTokenSecret string
+	ConsumerKey      string
+	ConsumerSecret   string
+	OAuthToken       string
+	OAuthTokenSecret string
 }
 
 // Returns Twitter's public timeline
