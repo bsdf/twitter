@@ -6,20 +6,30 @@
 package main
 
 import (
-	"github.com/bsdf/twitter-go"
 	"fmt"
+	"github.com/bsdf/twitter-go"
 )
 
 func main() {
-	tweets, err := twitter.GetUserTimeline("bsdf")
-    if err != nil {
-		fmt.Println(err.Error())
-        return
-    }
-
-	for _, tweet := range tweets {
-		fmt.Printf("%s (%s):\n", tweet.User.Name, tweet.User.ScreenName)
-		fmt.Printf("%s\n", tweet.Text)
+	t := twitter.Twitter{
+		ConsumerKey:      "CONSUMER_KEY_HERE",
+		ConsumerSecret:   "CONSUMER_SECRET_HERE",
+		OAuthToken:       "OAUTH_TOKEN_HERE",
+		OAuthTokenSecret: "OAUTH_TOKEN_SECRET_HERE",
 	}
+
+	_, err := t.Tweet("RT @bsdf M83 Designs Children's Sneakers")
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+
+	me, err := t.Follow("bsdf")
+	if err != nil {
+		fmt.Println("Couldn't follow @bsdf ):", err.Error())
+		return
+	}
+
+	fmt.Println("@bsdf currently goes by", me.Name)
 }
 ```
