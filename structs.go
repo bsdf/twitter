@@ -12,8 +12,8 @@ type Tweet struct {
 	RetweetCount        int    `json:"retweet_count"`
 	PossiblySensitive   bool   `json:"possibly_sensitive"`
 	Retweeted           bool
-	Source              *string
-	Text                *string
+	Source              string
+	Text                string
 	Truncated           bool
 	User                User
 }
