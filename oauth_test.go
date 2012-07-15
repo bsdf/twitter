@@ -3,6 +3,7 @@ package twitter
 import (
 	"fmt"
 	"testing"
+	"time"
 )
 
 func Test(t *testing.T) {
@@ -73,5 +74,34 @@ func TestOAuthHeader(t *testing.T) {
 
 	if header != expected {
 		t.Errorf("Unexpected header was generated")
+	}
+}
+
+func TestTweet(t *testing.T) {
+	str := fmt.Sprintf("𝕙𝕖𝕝𝕝𝕠 𝕎𝕠𝕣𝕝𝕕 #%d", time.Now().Unix())
+	tweet, err := tw.Tweet(str)
+	if err != nil {
+		t.Error(err.Error())
+	}
+
+	if tweet.Text != str {
+		t.Error("Tweet text was not return as expected")
+	}
+}
+
+func TestRequestToken(t *testing.T) {
+	var tt = Twitter{
+		consumerKey:    config.ConsumerKey,
+		consumerSecret: config.ConsumerSecret,
+	}
+
+	err := tt.requestToken()
+
+	if err != nil {
+		t.Error("Error requesting token:", err.Error())
+	}
+
+	if tt.oauthToken == "" || tt.oauthTokenSecret == "" {
+		t.Error("Request token succeeded, but no tokens returned")
 	}
 }

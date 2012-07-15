@@ -6,6 +6,8 @@ import (
 	"crypto/rand"
 	"crypto/sha1"
 	"encoding/base64"
+	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -28,6 +30,11 @@ type RestMethod struct {
 	Method string
 	Params map[string]string
 	Data   string
+}
+
+type TwitterError struct {
+	Error   string
+	Request string
 }
 
 // Generates OAuth http header
@@ -157,6 +164,7 @@ func getNonce() string {
 
 func (t *Twitter) sendRestRequest(m *RestMethod) ([]byte, error) {
 	client := &http.Client{}
+
 	req, _ := http.NewRequest(m.Method, m.Url, strings.NewReader(m.Data))
 	header := t.generateOAuthHeader(m)
 
@@ -178,5 +186,67 @@ func (t *Twitter) sendRestRequest(m *RestMethod) ([]byte, error) {
 	// remove any trailing commas
 	body = commaRegexp.ReplaceAll(body, []byte("$1"))
 
+	if string(body)[:8] == `{"error"` {
+		var twitterError TwitterError
+		json.Unmarshal(body, &twitterError)
+
+		return nil, errors.New(twitterError.Error)
+	}
+
 	return body, nil
+}
+
+func (t *Twitter) Tweet(message string) (tweet Tweet, err error) {
+	data := fmt.Sprintf("status=%s", encode(message))
+
+	method := &RestMethod{
+		Url:    "https://api.twitter.com/1/statuses/update.json",
+		Method: "POST",
+		Data:   data,
+	}
+
+	body, err := t.sendRestRequest(method)
+	if err != nil {
+		fmt.Println(err.Error())
+		return tweet, err
+	}
+
+	err = json.Unmarshal(body, &tweet)
+	if err != nil {
+		return tweet, err
+	}
+
+	return tweet, err
+}
+
+func (t *Twitter) requestToken() error {
+	params := map[string]string{
+		"oauth_consumer_key":     t.consumerKey,
+		"oauth_nonce":            getNonce(),
+		"oauth_signature_method": "HMAC-SHA1",
+		"oauth_timestamp":        fmt.Sprintf("%d", time.Now().Unix()),
+		"oauth_version":          "1.0",
+	}
+	method := &RestMethod{
+		Url:    "https://api.twitter.com/oauth/request_token",
+		Method: "POST",
+		Params: params,
+	}
+
+	body, err := t.sendRestRequest(method)
+	if err != nil {
+		return err
+	}
+
+	strBody := string(body)
+	if strBody[:6] == "Failed" {
+		return errors.New(strBody)
+	}
+
+	m := mapFromQueryString(strBody)
+
+	t.oauthToken = m["oauth_token"]
+	t.oauthTokenSecret = m["oauth_token_secret"]
+
+	return nil
 }
