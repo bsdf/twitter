@@ -143,7 +143,8 @@ func (t *Twitter) generateOAuthSignature(signatureBase string) string {
 
 // Wrapper for url.QueryEscape
 func encode(str string) string {
-	return url.QueryEscape(str)
+	esc := url.QueryEscape(str)
+	return strings.Replace(esc, "+", "%20", -1)
 }
 
 // Returns a Nonce value
