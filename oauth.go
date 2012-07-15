@@ -219,6 +219,48 @@ func (t *Twitter) Tweet(message string) (tweet Tweet, err error) {
 	return tweet, err
 }
 
+func (t *Twitter) Follow(username string) (user User, err error) {
+	method := &RestMethod{
+		Url:    "https://api.twitter.com/1/friendships/create.json",
+		Method: "POST",
+		Data:   fmt.Sprintf("screen_name=%s", encode(username)),
+	}
+
+	body, err := t.sendRestRequest(method)
+	if err != nil {
+		fmt.Println(err.Error())
+		return user, err
+	}
+
+	err = json.Unmarshal(body, &user)
+	if err != nil {
+		return user, err
+	}
+
+	return user, err
+}
+
+func (t *Twitter) UnFollow(username string) (user User, err error) {
+	method := &RestMethod{
+		Url:    "https://api.twitter.com/1/friendships/destroy.json",
+		Method: "POST",
+		Data:   fmt.Sprintf("screen_name=%s", encode(username)),
+	}
+
+	body, err := t.sendRestRequest(method)
+	if err != nil {
+		fmt.Println(err.Error())
+		return user, err
+	}
+
+	err = json.Unmarshal(body, &user)
+	if err != nil {
+		return user, err
+	}
+
+	return user, err
+}
+
 func (t *Twitter) requestToken() error {
 	params := map[string]string{
 		"oauth_consumer_key":     t.consumerKey,

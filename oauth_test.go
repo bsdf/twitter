@@ -82,10 +82,12 @@ func TestTweet(t *testing.T) {
 	tweet, err := tw.Tweet(str)
 	if err != nil {
 		t.Error(err.Error())
+		return
 	}
 
 	if tweet.Text != str {
 		t.Error("Tweet text was not return as expected")
+		return
 	}
 }
 
@@ -99,9 +101,39 @@ func TestRequestToken(t *testing.T) {
 
 	if err != nil {
 		t.Error("Error requesting token:", err.Error())
+		return
 	}
 
 	if tt.oauthToken == "" || tt.oauthTokenSecret == "" {
 		t.Error("Request token succeeded, but no tokens returned")
+		return
+	}
+}
+
+func TestFollow(t *testing.T) {
+	userName := "bsdf"
+	user, err := tw.Follow(userName)
+	if err != nil {
+		t.Error("Error following user:", err.Error())
+		return
+	}
+
+	if user.ScreenName != "bsdf" {
+		t.Error("Twitter call returned, but incorrect user returned")
+		return
+	}
+}
+
+func TestUnFollow(t *testing.T) {
+	userName := "bsdf"
+	user, err := tw.UnFollow(userName)
+	if err != nil {
+		t.Error("Error unfollowing user:", err.Error())
+		return
+	}
+
+	if user.ScreenName != "bsdf" {
+		t.Error("Twitter call returned, but incorrect user returned")
+		return
 	}
 }
