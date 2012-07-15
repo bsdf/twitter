@@ -103,7 +103,7 @@ func (t *Twitter) generateSignatureBase(m *RestMethod) string {
 		buffer.WriteString(encode(m.Data))
 		out = buffer.String()
 	} else {
-		// remove trailing %26 (%&)
+		// remove trailing %26 (&)
 		out = buffer.String()
 		out = out[:len(out)-3]
 	}
