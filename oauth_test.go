@@ -152,11 +152,22 @@ func TestRetweet(t *testing.T) {
 }
 
 func TestDestroy(t *testing.T) {
-	tweet, err := tw.Destroy(tweetId)
+	_, err := tw.Destroy(tweetId)
 	if err != nil {
 		t.Error("Error destroying tweet:", err.Error())
 		return
 	}
+}
 
-	t.Logf("%+v", tweet)
+func TestSearch(t *testing.T) {
+	tweets, err := tw.Search("gucci mane")
+	if err != nil {
+		t.Error("Error searching tweets:", err.Error())
+		return
+	}
+
+	if len(tweets) == 0 {
+		t.Error("No results returned.")
+		return
+	}
 }

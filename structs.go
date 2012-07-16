@@ -72,3 +72,8 @@ type User struct {
 	Lang           string
 	Location       string
 }
+
+type SearchResult struct {
+	Query   string
+	Results []Tweet
+}

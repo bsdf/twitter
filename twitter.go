@@ -171,6 +171,28 @@ func (t *Twitter) Destroy(id int64) (tweet Tweet, err error) {
 	return tweet, err
 }
 
+// Destroys a tweet based upon its id
+// Returns the Tweet if successful, error if unsuccessful
+func (t *Twitter) Search(query string) (tweets []Tweet, err error) {
+	url := fmt.Sprintf("http://search.twitter.com/search.json?q=%s", encode(query))
+
+	body, err := getResponseBody(url)
+	if err != nil {
+		fmt.Println(err.Error())
+		return tweets, err
+	}
+
+	fmt.Printf("%s\n\n", body)
+
+	var result SearchResult
+	err = json.Unmarshal(body, &result)
+	if err != nil {
+		return tweets, err
+	}
+
+	return result.Results, err
+}
+
 func getResponseBody(url string) ([]byte, error) {
 	resp, err := http.Get(url)
 	if err != nil {
