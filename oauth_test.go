@@ -171,3 +171,16 @@ func TestSearch(t *testing.T) {
 		return
 	}
 }
+
+func TestRateLimitStatus(t *testing.T) {
+	status, err := tw.RateLimitStatus()
+	if err != nil {
+		t.Error("Error retrieving rate limit status:", err.Error())
+		return
+	}
+
+	if status.ResetTime == "" {
+		t.Error("Rate limit status returned ok, but was not unmarshalled correctly")
+		return
+	}
+}

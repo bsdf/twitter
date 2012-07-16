@@ -77,3 +77,10 @@ type SearchResult struct {
 	Query   string
 	Results []Tweet
 }
+
+type RateLimitStatus struct {
+	RemainingHits    int    `json:"remaining_hits"`
+	ResetTime        string `json:"reset_time"`
+	ResetTimeSeconds int64  `json:"reset_time_in_seconds"`
+	HourlyLimit      int    `json:"hourly_limit"`
+}
