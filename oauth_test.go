@@ -137,3 +137,12 @@ func TestUnfollow(t *testing.T) {
 		return
 	}
 }
+
+func TestRetweet(t *testing.T) {
+	var tweetId int64 = 221281838440783875
+
+	tweet, err := tw.Retweet(tweetId)
+	if err != nil {
+		t.Error("Error retweeting:", err.Error())
+	}
+}
