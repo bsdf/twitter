@@ -193,7 +193,6 @@ func (t *Twitter) Search(query string) (tweets []Tweet, err error) {
 
 // Returns current RateLimitStatus or error
 func (t *Twitter) GetRateLimitStatus() (status RateLimitStatus, err error) {
-
 	method := &RestMethod{
 		Url:    "https://api.twitter.com/1/account/rate_limit_status.json",
 		Method: "GET",
@@ -211,6 +210,26 @@ func (t *Twitter) GetRateLimitStatus() (status RateLimitStatus, err error) {
 	}
 
 	return status, err
+}
+
+func (t *Twitter) GetTotals() (totals Totals, err error) {
+	method := &RestMethod{
+		Url:    "https://api.twitter.com/1/account/totals.json",
+		Method: "GET",
+	}
+
+	body, err := t.sendRestRequest(method)
+	if err != nil {
+		fmt.Println(err.Error())
+		return totals, err
+	}
+
+	err = json.Unmarshal(body, &totals)
+	if err != nil {
+		return totals, err
+	}
+
+	return totals, err
 }
 
 func getResponseBody(url string) ([]byte, error) {

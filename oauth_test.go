@@ -184,3 +184,16 @@ func TestRateLimitStatus(t *testing.T) {
 		return
 	}
 }
+
+func TestGetTotals(t *testing.T) {
+	totals, err := tw.GetTotals()
+	if err != nil {
+		t.Error("Error getting totals:", err.Error())
+		return
+	}
+
+	if totals.Updates == 0 {
+		t.Error("Totals request returned ok, but was not unmarshalled correctly")
+		return
+	}
+}

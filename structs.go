@@ -84,3 +84,10 @@ type RateLimitStatus struct {
 	ResetTimeSeconds int64  `json:"reset_time_in_seconds"`
 	HourlyLimit      int    `json:"hourly_limit"`
 }
+
+type Totals struct {
+	Friends   int
+	Updates   int
+	Followers int
+	Favorites int
+}
