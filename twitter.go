@@ -147,6 +147,30 @@ func (t *Twitter) Retweet(id int64) (tweet Tweet, err error) {
 	return tweet, err
 }
 
+// Destroys a tweet based upon its id
+// Returns the Tweet if successful, error if unsuccessful
+func (t *Twitter) Destroy(id int64) (tweet Tweet, err error) {
+	url := fmt.Sprintf("http://api.twitter.com/1/statuses/destroy/%d.json", id)
+
+	method := &RestMethod{
+		Url:    url,
+		Method: "POST",
+	}
+
+	body, err := t.sendRestRequest(method)
+	if err != nil {
+		fmt.Println(err.Error())
+		return tweet, err
+	}
+
+	err = json.Unmarshal(body, &tweet)
+	if err != nil {
+		return tweet, err
+	}
+
+	return tweet, err
+}
+
 func getResponseBody(url string) ([]byte, error) {
 	resp, err := http.Get(url)
 	if err != nil {

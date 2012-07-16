@@ -6,6 +6,8 @@ import (
 	"time"
 )
 
+var tweetId int64
+
 func Test(t *testing.T) {
 	fmt.Print()
 }
@@ -89,6 +91,8 @@ func TestTweet(t *testing.T) {
 		t.Error("Tweet text was not return as expected")
 		return
 	}
+
+	tweetId = tweet.Id
 }
 
 func TestRequestToken(t *testing.T) {
@@ -141,8 +145,18 @@ func TestUnfollow(t *testing.T) {
 func TestRetweet(t *testing.T) {
 	var tweetId int64 = 221281838440783875
 
-	tweet, err := tw.Retweet(tweetId)
+	_, err := tw.Retweet(tweetId)
 	if err != nil {
 		t.Error("Error retweeting:", err.Error())
 	}
+}
+
+func TestDestroy(t *testing.T) {
+	tweet, err := tw.Destroy(tweetId)
+	if err != nil {
+		t.Error("Error destroying tweet:", err.Error())
+		return
+	}
+
+	t.Logf("%+v", tweet)
 }
