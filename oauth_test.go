@@ -197,3 +197,27 @@ func TestGetTotals(t *testing.T) {
 		return
 	}
 }
+
+func TestGetPrivacyPolicy(t *testing.T) {
+	policy, err := tw.GetPrivacyPolicy()
+	if err != nil {
+		t.Error("Error returning privacy policy (LOL):", err.Error())
+		return
+	}
+	if policy == "" {
+		t.Error("Privacy policy is empty, have fun!")
+		return
+	}
+}
+
+func TestGetTOS(t *testing.T) {
+	tos, err := tw.GetTOS()
+	if err != nil {
+		t.Error("Error returning TOS (LOL):", err.Error())
+		return
+	}
+	if tos == "" {
+		t.Error("Terms of Service is empty, have fun!")
+		return
+	}
+}

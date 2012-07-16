@@ -232,6 +232,54 @@ func (t *Twitter) GetTotals() (totals Totals, err error) {
 	return totals, err
 }
 
+func (t *Twitter) GetPrivacyPolicy() (policy string, err error) {
+	method := &RestMethod{
+		Url:    "https://api.twitter.com/1/legal/privacy.json",
+		Method: "GET",
+	}
+
+	body, err := t.sendRestRequest(method)
+	if err != nil {
+		fmt.Println(err.Error())
+		return policy, err
+	}
+
+	var policyResult = struct {
+		Privacy string
+	}{}
+
+	err = json.Unmarshal(body, &policyResult)
+	if err != nil {
+		return policy, err
+	}
+
+	return policyResult.Privacy, err
+}
+
+func (t *Twitter) GetTOS() (tos string, err error) {
+	method := &RestMethod{
+		Url:    "https://api.twitter.com/1/legal/tos.json",
+		Method: "GET",
+	}
+
+	body, err := t.sendRestRequest(method)
+	if err != nil {
+		fmt.Println(err.Error())
+		return tos, err
+	}
+
+	var tosResult = struct {
+		Tos string
+	}{}
+
+	err = json.Unmarshal(body, &tosResult)
+	if err != nil {
+		return tos, err
+	}
+
+	return tosResult.Tos, err
+}
+
 func getResponseBody(url string) ([]byte, error) {
 	resp, err := http.Get(url)
 	if err != nil {
