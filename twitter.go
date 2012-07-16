@@ -192,7 +192,7 @@ func (t *Twitter) Search(query string) (tweets []Tweet, err error) {
 }
 
 // Returns current RateLimitStatus or error
-func (t *Twitter) RateLimitStatus() (status RateLimitStatus, err error) {
+func (t *Twitter) GetRateLimitStatus() (status RateLimitStatus, err error) {
 
 	method := &RestMethod{
 		Url:    "https://api.twitter.com/1/account/rate_limit_status.json",

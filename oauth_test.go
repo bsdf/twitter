@@ -173,7 +173,7 @@ func TestSearch(t *testing.T) {
 }
 
 func TestRateLimitStatus(t *testing.T) {
-	status, err := tw.RateLimitStatus()
+	status, err := tw.GetRateLimitStatus()
 	if err != nil {
 		t.Error("Error retrieving rate limit status:", err.Error())
 		return
