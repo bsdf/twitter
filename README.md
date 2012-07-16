@@ -8,6 +8,7 @@ package main
 import (
 	"fmt"
 	"github.com/bsdf/twitter-go"
+	"strings"
 )
 
 func main() {
@@ -31,5 +32,13 @@ func main() {
 	}
 
 	fmt.Println("@bsdf currently goes by", me.Name)
+
+	tos, err := t.GetTOS()
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+
+	fmt.Println(strings.Replace(tos, "Terms", "Turds", -1))
 }
 ```
