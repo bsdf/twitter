@@ -2,9 +2,11 @@ package twitter
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strings"
 )
 
 const (
@@ -278,6 +280,64 @@ func (t *Twitter) GetTOS() (tos string, err error) {
 	}
 
 	return tosResult.Tos, err
+}
+
+func (t *Twitter) GetUserFriends(user string) (friends []int64, err error) {
+	url := fmt.Sprintf("https://api.twitter.com/1/friends/ids.json?screen_name=%s", user)
+	method := &RestMethod{
+		Url:    url,
+		Method: "GET",
+	}
+
+	body, err := t.sendRestRequest(method)
+	if err != nil {
+		fmt.Println(err.Error())
+		return friends, err
+	}
+
+	var responseStruct = struct {
+		Ids []int64
+	}{}
+
+	err = json.Unmarshal(body, &responseStruct)
+	if err != nil {
+		return friends, err
+	}
+
+	return responseStruct.Ids, err
+}
+
+func (t *Twitter) LookupUsersById(ids []int64) (users []User, err error) {
+	if len(ids) > 100 {
+		return users, errors.New("LookupUsersById can only take 100 or less ids")
+	}
+
+	var strIds = make([]string, len(ids))
+	i := 0
+	for _, v := range ids {
+		strIds[i] = fmt.Sprintf("%d", v)
+		i++
+	}
+
+	urlBase := "https://api.twitter.com/1/users/lookup.json?include_entities=false&user_id=%s"
+	url := fmt.Sprintf(urlBase, strings.Join(strIds, ","))
+	method := &RestMethod{
+		Url:    url,
+		Method: "GET",
+	}
+
+	body, err := t.sendRestRequest(method)
+	if err != nil {
+		fmt.Println(err.Error())
+		return users, err
+	}
+
+	err = json.Unmarshal(body, &users)
+	if err != nil {
+		return users, err
+	}
+
+	return users, err
 }
 
 func getResponseBody(url string) ([]byte, error) {

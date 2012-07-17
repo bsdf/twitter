@@ -221,3 +221,28 @@ func TestGetTOS(t *testing.T) {
 		return
 	}
 }
+
+func TestGetUserFriends(t *testing.T) {
+	friends, err := tw.GetUserFriends("bsdf")
+	if err != nil {
+		t.Error("Error retrieving friends:", err.Error())
+		return
+	}
+	if friends == nil || len(friends) == 0 {
+		t.Error("Request returned correctly but no friends returned")
+		return
+	}
+}
+
+func TestLookupUsersById(t *testing.T) {
+	userIds := []int64{76395009, 22062197}
+	users, err := tw.LookupUsersById(userIds)
+	if err != nil {
+		t.Error("Error retrieving users:", err.Error())
+		return
+	}
+	if len(users) != 2 {
+		t.Error("Wrong number of users returned.")
+		return
+	}
+}
