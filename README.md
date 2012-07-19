@@ -1,12 +1,12 @@
 ![](http://i.imgur.com/0V5yO.jpg)
 
-`$ go get github.com/bsdf/twitter-go`
+`$ go get github.com/bsdf/twitter`
 
 ```go
 package main
 
 import (
-	"github.com/bsdf/twitter-go"
+	"github.com/bsdf/twitter"
 	"fmt"
 )
 
