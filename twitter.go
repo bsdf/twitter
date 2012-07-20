@@ -67,7 +67,6 @@ func (t *Twitter) Tweet(message string) (tweet Tweet, err error) {
 
 	body, err := t.sendRestRequest(method)
 	if err != nil {
-		fmt.Println(err.Error())
 		return tweet, err
 	}
 
@@ -90,7 +89,6 @@ func (t *Twitter) Follow(username string) (user User, err error) {
 
 	body, err := t.sendRestRequest(method)
 	if err != nil {
-		fmt.Println(err.Error())
 		return user, err
 	}
 
@@ -113,7 +111,6 @@ func (t *Twitter) Unfollow(username string) (user User, err error) {
 
 	body, err := t.sendRestRequest(method)
 	if err != nil {
-		fmt.Println(err.Error())
 		return user, err
 	}
 
@@ -137,7 +134,6 @@ func (t *Twitter) Retweet(id int64) (tweet Tweet, err error) {
 
 	body, err := t.sendRestRequest(method)
 	if err != nil {
-		fmt.Println(err.Error())
 		return tweet, err
 	}
 
@@ -161,7 +157,6 @@ func (t *Twitter) Destroy(id int64) (tweet Tweet, err error) {
 
 	body, err := t.sendRestRequest(method)
 	if err != nil {
-		fmt.Println(err.Error())
 		return tweet, err
 	}
 
@@ -180,7 +175,6 @@ func (t *Twitter) Search(query string) (tweets []Tweet, err error) {
 
 	body, err := getResponseBody(url)
 	if err != nil {
-		fmt.Println(err.Error())
 		return tweets, err
 	}
 
@@ -202,7 +196,6 @@ func (t *Twitter) GetRateLimitStatus() (status RateLimitStatus, err error) {
 
 	body, err := t.sendRestRequest(method)
 	if err != nil {
-		fmt.Println(err.Error())
 		return status, err
 	}
 
@@ -222,7 +215,6 @@ func (t *Twitter) GetTotals() (totals Totals, err error) {
 
 	body, err := t.sendRestRequest(method)
 	if err != nil {
-		fmt.Println(err.Error())
 		return totals, err
 	}
 
@@ -242,7 +234,6 @@ func (t *Twitter) GetPrivacyPolicy() (policy string, err error) {
 
 	body, err := t.sendRestRequest(method)
 	if err != nil {
-		fmt.Println(err.Error())
 		return policy, err
 	}
 
@@ -266,7 +257,6 @@ func (t *Twitter) GetTOS() (tos string, err error) {
 
 	body, err := t.sendRestRequest(method)
 	if err != nil {
-		fmt.Println(err.Error())
 		return tos, err
 	}
 
@@ -291,7 +281,6 @@ func (t *Twitter) GetUserFriends(user string) (friends []int64, err error) {
 
 	body, err := t.sendRestRequest(method)
 	if err != nil {
-		fmt.Println(err.Error())
 		return friends, err
 	}
 
@@ -328,7 +317,6 @@ func (t *Twitter) LookupUsersById(ids []int64) (users []User, err error) {
 
 	body, err := t.sendRestRequest(method)
 	if err != nil {
-		fmt.Println(err.Error())
 		return users, err
 	}
 
