@@ -21,6 +21,15 @@ type Twitter struct {
 	OAuthTokenSecret string
 }
 
+func New(consumerKey, consumerSecret, oauthToken, oauthTokenSecret string) *Twitter {
+	return &Twitter{
+		consumerKey,
+		consumerSecret,
+		oauthToken,
+		oauthTokenSecret,
+	}
+}
+
 // Returns Twitter's public timeline
 func (t *Twitter) GetPublicTimeline() ([]Tweet, error) {
 	body, err := getResponseBody(publicTimelineURL)
