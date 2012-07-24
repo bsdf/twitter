@@ -356,3 +356,18 @@ func (t *Twitter) GetRetweetsOfMe() (tweets []Tweet, err error) {
 
 	return
 }
+
+func (t *Twitter) GetDirectMessages() (dms []DirectMessage, err error) {
+	method := &RestMethod{
+		Url:    "https://api.twitter.com/1/direct_messages.json",
+		Method: "GET",
+	}
+
+	body, err := t.sendRestRequest(method)
+	if err != nil {
+		return
+	}
+
+	err = json.Unmarshal(body, &dms)
+	return
+}

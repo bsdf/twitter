@@ -91,3 +91,15 @@ type Totals struct {
 	Followers int
 	Favorites int
 }
+
+type DirectMessage struct {
+	Id                  int64
+	CreatedAt           string `json:"created_at"`
+	SenderScreenName    string `json:"sender_screen_name"`
+	Sender              User
+	SenderId            int64 `json:"sender_id"`
+	Text                string
+	RecipientScreenName string `json:"recipient_screen_name"`
+	Recipient           User
+	RecipientId         int64 `json:"recipient_id"`
+}

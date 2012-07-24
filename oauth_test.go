@@ -253,3 +253,11 @@ func TestGetRetweetsOfMe(t *testing.T) {
 		t.Error("Error fetching retweets of me (you):", err.Error())
 	}
 }
+
+func TestGetDirectMessages(t *testing.T) {
+	_, err := tw.GetDirectMessages()
+	if err != nil {
+		t.Error("Error retrieving DMs (maybe you dont have any.):", err.Error())
+		return
+	}
+}
