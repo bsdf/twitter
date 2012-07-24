@@ -246,3 +246,10 @@ func TestLookupUsersById(t *testing.T) {
 		return
 	}
 }
+
+func TestGetRetweetsOfMe(t *testing.T) {
+	_, err := tw.GetRetweetsOfMe()
+	if err != nil {
+		t.Error("Error fetching retweets of me (you):", err.Error())
+	}
+}

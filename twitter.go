@@ -332,3 +332,27 @@ func (t *Twitter) LookupUsersById(ids []int64) (users []User, err error) {
 
 	return
 }
+
+func (t *Twitter) GetRetweetsOfMe() (tweets []Tweet, err error) {
+	method := &RestMethod{
+		Url:    "http://api.twitter.com/1/statuses/retweets_of_me.format",
+		Method: "GET",
+	}
+
+	body, err := t.sendRestRequest(method)
+	if err != nil {
+		return
+	}
+
+	// TODO: DON'T DO THIS
+	if string(body) == " " {
+		return
+	}
+
+	err = json.Unmarshal(body, &tweets)
+	if err != nil {
+		return
+	}
+
+	return
+}
