@@ -196,6 +196,27 @@ func (t *Twitter) sendRestRequest(m *RestMethod) ([]byte, error) {
 	return body, nil
 }
 
+// Non-authenticated GET request
+func getResponseBody(url string) ([]byte, error) {
+	resp, err := http.Get(url)
+	if err != nil {
+		return nil, err
+	}
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	// sanitize json
+	// remove nulls
+	body = nullRegexp.ReplaceAll(body, nil)
+	// remove any trailing commas
+	body = commaRegexp.ReplaceAll(body, []byte("$1"))
+
+	return body, nil
+}
+
 func (t *Twitter) requestToken() error {
 	params := map[string]string{
 		"oauth_consumer_key":     t.ConsumerKey,

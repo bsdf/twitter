@@ -336,23 +336,3 @@ func (t *Twitter) LookupUsersById(ids []int64) (users []User, err error) {
 
 	return users, err
 }
-
-func getResponseBody(url string) ([]byte, error) {
-	resp, err := http.Get(url)
-	if err != nil {
-		return nil, err
-	}
-
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return nil, err
-	}
-
-	// sanitize json
-	// remove nulls
-	body = nullRegexp.ReplaceAll(body, nil)
-	// remove any trailing commas
-	body = commaRegexp.ReplaceAll(body, []byte("$1"))
-
-	return body, nil
-}
