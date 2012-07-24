@@ -371,3 +371,36 @@ func (t *Twitter) GetDirectMessages() (dms []DirectMessage, err error) {
 	err = json.Unmarshal(body, &dms)
 	return
 }
+
+func (t *Twitter) SendDirectMessage(user, text string) (dm DirectMessage, err error) {
+	data := fmt.Sprintf("screen_name=%s&text=%s", encode(user), encode(text))
+	method := &RestMethod{
+		Url:    "https://api.twitter.com/1/direct_messages/new.json",
+		Method: "POST",
+		Data:   data,
+	}
+
+	body, err := tw.sendRestRequest(method)
+	if err != nil {
+		return
+	}
+
+	err = json.Unmarshal(body, &dm)
+	return
+}
+
+func (t *Twitter) DeleteDirectMessage(id int64) (dm DirectMessage, err error) {
+	url := fmt.Sprintf("http://api.twitter.com/1/direct_messages/destroy/%d.json", id)
+	method := &RestMethod{
+		Url:    url,
+		Method: "POST",
+	}
+
+	body, err := tw.sendRestRequest(method)
+	if err != nil {
+		return
+	}
+
+	err = json.Unmarshal(body, &dm)
+	return
+}

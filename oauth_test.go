@@ -7,6 +7,7 @@ import (
 )
 
 var tweetId int64
+var dmId int64
 
 func Test(t *testing.T) {
 	fmt.Print()
@@ -259,5 +260,23 @@ func TestGetDirectMessages(t *testing.T) {
 	if err != nil {
 		t.Error("Error retrieving DMs (maybe you dont have any.):", err.Error())
 		return
+	}
+}
+
+func TestSendDirectMessage(t *testing.T) {
+	dm, err := tw.SendDirectMessage("MEMEMEMEMES", "HIHIHIHIHI!!")
+	if err != nil {
+		t.Error("Error sending DM:", err.Error())
+		return
+	}
+
+	// save for later
+	dmId = dm.Id
+}
+
+func TestDeleteDirectMessage(t *testing.T) {
+	_, err := tw.DeleteDirectMessage(dmId)
+	if err != nil {
+		t.Error("Error deleting DM:", err.Error())
 	}
 }
