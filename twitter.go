@@ -4,8 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
-	"net/http"
 	"strings"
 )
 
@@ -31,36 +29,34 @@ func New(consumerKey, consumerSecret, oauthToken, oauthTokenSecret string) *Twit
 }
 
 // Returns Twitter's public timeline
-func (t *Twitter) GetPublicTimeline() ([]Tweet, error) {
+func (t *Twitter) GetPublicTimeline() (tweets []Tweet, err error) {
 	body, err := getResponseBody(publicTimelineURL)
 	if err != nil {
-		return nil, err
+		return
 	}
 
-	var tweets []Tweet
 	err = json.Unmarshal(body, &tweets)
 	if err != nil {
-		return nil, err
+		return
 	}
 
-	return tweets, nil
+	return
 }
 
 // Retrieves a user's timeline
-func (t *Twitter) GetUserTimeline(screenName string) ([]Tweet, error) {
+func (t *Twitter) GetUserTimeline(screenName string) (tweets []Tweet, err error) {
 	url := fmt.Sprintf(userStatusURL, screenName)
 	body, err := getResponseBody(url)
 	if err != nil {
-		return nil, err
+		return
 	}
 
-	var tweets []Tweet
 	err = json.Unmarshal(body, &tweets)
 	if err != nil {
-		return nil, err
+		return
 	}
 
-	return tweets, nil
+	return
 }
 
 // Send a tweet
@@ -76,15 +72,15 @@ func (t *Twitter) Tweet(message string) (tweet Tweet, err error) {
 
 	body, err := t.sendRestRequest(method)
 	if err != nil {
-		return tweet, err
+		return
 	}
 
 	err = json.Unmarshal(body, &tweet)
 	if err != nil {
-		return tweet, err
+		return
 	}
 
-	return tweet, err
+	return
 }
 
 // Follow a user
@@ -98,15 +94,15 @@ func (t *Twitter) Follow(username string) (user User, err error) {
 
 	body, err := t.sendRestRequest(method)
 	if err != nil {
-		return user, err
+		return
 	}
 
 	err = json.Unmarshal(body, &user)
 	if err != nil {
-		return user, err
+		return
 	}
 
-	return user, err
+	return
 }
 
 // Unfollow a user
@@ -120,15 +116,15 @@ func (t *Twitter) Unfollow(username string) (user User, err error) {
 
 	body, err := t.sendRestRequest(method)
 	if err != nil {
-		return user, err
+		return
 	}
 
 	err = json.Unmarshal(body, &user)
 	if err != nil {
-		return user, err
+		return
 	}
 
-	return user, err
+	return
 }
 
 // Retweets a tweet based upon its id
@@ -143,15 +139,15 @@ func (t *Twitter) Retweet(id int64) (tweet Tweet, err error) {
 
 	body, err := t.sendRestRequest(method)
 	if err != nil {
-		return tweet, err
+		return
 	}
 
 	err = json.Unmarshal(body, &tweet)
 	if err != nil {
-		return tweet, err
+		return
 	}
 
-	return tweet, err
+	return
 }
 
 // Destroys a tweet based upon its id
@@ -166,15 +162,15 @@ func (t *Twitter) Destroy(id int64) (tweet Tweet, err error) {
 
 	body, err := t.sendRestRequest(method)
 	if err != nil {
-		return tweet, err
+		return
 	}
 
 	err = json.Unmarshal(body, &tweet)
 	if err != nil {
-		return tweet, err
+		return
 	}
 
-	return tweet, err
+	return
 }
 
 // Destroys a tweet based upon its id
@@ -184,13 +180,13 @@ func (t *Twitter) Search(query string) (tweets []Tweet, err error) {
 
 	body, err := getResponseBody(url)
 	if err != nil {
-		return tweets, err
+		return
 	}
 
 	var result SearchResult
 	err = json.Unmarshal(body, &result)
 	if err != nil {
-		return tweets, err
+		return
 	}
 
 	return result.Results, err
@@ -205,15 +201,15 @@ func (t *Twitter) GetRateLimitStatus() (status RateLimitStatus, err error) {
 
 	body, err := t.sendRestRequest(method)
 	if err != nil {
-		return status, err
+		return
 	}
 
 	err = json.Unmarshal(body, &status)
 	if err != nil {
-		return status, err
+		return
 	}
 
-	return status, err
+	return
 }
 
 func (t *Twitter) GetTotals() (totals Totals, err error) {
@@ -224,15 +220,15 @@ func (t *Twitter) GetTotals() (totals Totals, err error) {
 
 	body, err := t.sendRestRequest(method)
 	if err != nil {
-		return totals, err
+		return
 	}
 
 	err = json.Unmarshal(body, &totals)
 	if err != nil {
-		return totals, err
+		return
 	}
 
-	return totals, err
+	return
 }
 
 func (t *Twitter) GetPrivacyPolicy() (policy string, err error) {
@@ -243,7 +239,7 @@ func (t *Twitter) GetPrivacyPolicy() (policy string, err error) {
 
 	body, err := t.sendRestRequest(method)
 	if err != nil {
-		return policy, err
+		return
 	}
 
 	var policyResult = struct {
@@ -252,7 +248,7 @@ func (t *Twitter) GetPrivacyPolicy() (policy string, err error) {
 
 	err = json.Unmarshal(body, &policyResult)
 	if err != nil {
-		return policy, err
+		return
 	}
 
 	return policyResult.Privacy, err
@@ -266,7 +262,7 @@ func (t *Twitter) GetTOS() (tos string, err error) {
 
 	body, err := t.sendRestRequest(method)
 	if err != nil {
-		return tos, err
+		return
 	}
 
 	var tosResult = struct {
@@ -275,7 +271,7 @@ func (t *Twitter) GetTOS() (tos string, err error) {
 
 	err = json.Unmarshal(body, &tosResult)
 	if err != nil {
-		return tos, err
+		return
 	}
 
 	return tosResult.Tos, err
@@ -290,7 +286,7 @@ func (t *Twitter) GetUserFriends(user string) (friends []int64, err error) {
 
 	body, err := t.sendRestRequest(method)
 	if err != nil {
-		return friends, err
+		return
 	}
 
 	var responseStruct = struct {
@@ -299,7 +295,7 @@ func (t *Twitter) GetUserFriends(user string) (friends []int64, err error) {
 
 	err = json.Unmarshal(body, &responseStruct)
 	if err != nil {
-		return friends, err
+		return
 	}
 
 	return responseStruct.Ids, err
@@ -326,13 +322,13 @@ func (t *Twitter) LookupUsersById(ids []int64) (users []User, err error) {
 
 	body, err := t.sendRestRequest(method)
 	if err != nil {
-		return users, err
+		return
 	}
 
 	err = json.Unmarshal(body, &users)
 	if err != nil {
-		return users, err
+		return
 	}
 
-	return users, err
+	return
 }

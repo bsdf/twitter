@@ -162,7 +162,7 @@ func getNonce() string {
 	return nonceRegexp.ReplaceAllString(enc, "")
 }
 
-func (t *Twitter) sendRestRequest(m *RestMethod) ([]byte, error) {
+func (t *Twitter) sendRestRequest(m *RestMethod) (body []byte, err error) {
 	client := &http.Client{}
 
 	req, _ := http.NewRequest(m.Method, m.Url, strings.NewReader(m.Data))
@@ -172,12 +172,12 @@ func (t *Twitter) sendRestRequest(m *RestMethod) ([]byte, error) {
 
 	resp, err := client.Do(req)
 	if err != nil {
-		return nil, err
+		return
 	}
 
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err = ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return nil, err
+		return
 	}
 
 	// sanitize json
@@ -190,22 +190,23 @@ func (t *Twitter) sendRestRequest(m *RestMethod) ([]byte, error) {
 		var twitterError TwitterError
 		json.Unmarshal(body, &twitterError)
 
-		return nil, errors.New(twitterError.Error)
+		err = errors.New(twitterError.Error)
+		return
 	}
 
-	return body, nil
+	return
 }
 
 // Non-authenticated GET request
-func getResponseBody(url string) ([]byte, error) {
+func getResponseBody(url string) (body []byte, err error) {
 	resp, err := http.Get(url)
 	if err != nil {
-		return nil, err
+		return
 	}
 
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err = ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return nil, err
+		return
 	}
 
 	// sanitize json
@@ -214,10 +215,10 @@ func getResponseBody(url string) ([]byte, error) {
 	// remove any trailing commas
 	body = commaRegexp.ReplaceAll(body, []byte("$1"))
 
-	return body, nil
+	return
 }
 
-func (t *Twitter) requestToken() error {
+func (t *Twitter) requestToken() (err error) {
 	params := map[string]string{
 		"oauth_consumer_key":     t.ConsumerKey,
 		"oauth_nonce":            getNonce(),
@@ -233,12 +234,13 @@ func (t *Twitter) requestToken() error {
 
 	body, err := t.sendRestRequest(method)
 	if err != nil {
-		return err
+		return
 	}
 
 	strBody := string(body)
 	if strBody[:6] == "Failed" {
-		return errors.New(strBody)
+		err = errors.New(strBody)
+		return
 	}
 
 	m := mapFromQueryString(strBody)
@@ -246,5 +248,5 @@ func (t *Twitter) requestToken() error {
 	t.OAuthToken = m["oauth_token"]
 	t.OAuthTokenSecret = m["oauth_token_secret"]
 
-	return nil
+	return
 }
