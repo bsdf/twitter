@@ -186,7 +186,7 @@ func (t *Twitter) sendRestRequest(m *RestMethod) (body []byte, err error) {
 	// remove any trailing commas
 	body = commaRegexp.ReplaceAll(body, []byte("$1"))
 
-	if string(body)[:8] == `{"error"` {
+	if len(body) >= 8 && string(body)[:8] == `{"error"` {
 		var twitterError TwitterError
 		json.Unmarshal(body, &twitterError)
 
