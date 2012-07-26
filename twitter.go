@@ -380,7 +380,7 @@ func (t *Twitter) SendDirectMessage(user, text string) (dm DirectMessage, err er
 		Data:   data,
 	}
 
-	body, err := tw.sendRestRequest(method)
+	body, err := t.sendRestRequest(method)
 	if err != nil {
 		return
 	}
@@ -396,7 +396,7 @@ func (t *Twitter) DeleteDirectMessage(id int64) (dm DirectMessage, err error) {
 		Method: "POST",
 	}
 
-	body, err := tw.sendRestRequest(method)
+	body, err := t.sendRestRequest(method)
 	if err != nil {
 		return
 	}
