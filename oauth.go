@@ -112,8 +112,8 @@ func (t *Twitter) generateSignatureBase(m *RestMethod) string {
 }
 
 // Turns url-style query string into a map
-func mapFromQueryString(queryString string) map[string]string {
-	m := make(map[string]string)
+func mapFromQueryString(queryString string) (m map[string]string) {
+	m = make(map[string]string)
 	params := strings.Split(queryString, "&")
 
 	for _, param := range params {
@@ -123,19 +123,19 @@ func mapFromQueryString(queryString string) map[string]string {
 
 		m[key] = val
 	}
-	return m
+	return
 }
 
 // Returns []string of alphabetically sorted map keys
-func sortMapKeys(m map[string]string) []string {
-	keys := make([]string, len(m))
+func sortMapKeys(m map[string]string) (keys []string) {
+	keys = make([]string, len(m))
 	i := 0
 	for k, _ := range m {
 		keys[i] = k
 		i++
 	}
 	sort.Strings(keys)
-	return keys
+	return
 }
 
 // Generates an OAuth signature using signatureBase

@@ -36,10 +36,6 @@ func (t *Twitter) GetPublicTimeline() (tweets []Tweet, err error) {
 	}
 
 	err = json.Unmarshal(body, &tweets)
-	if err != nil {
-		return
-	}
-
 	return
 }
 
@@ -52,10 +48,6 @@ func (t *Twitter) GetUserTimeline(screenName string) (tweets []Tweet, err error)
 	}
 
 	err = json.Unmarshal(body, &tweets)
-	if err != nil {
-		return
-	}
-
 	return
 }
 
@@ -76,10 +68,6 @@ func (t *Twitter) Tweet(message string) (tweet Tweet, err error) {
 	}
 
 	err = json.Unmarshal(body, &tweet)
-	if err != nil {
-		return
-	}
-
 	return
 }
 
@@ -98,10 +86,6 @@ func (t *Twitter) Follow(username string) (user User, err error) {
 	}
 
 	err = json.Unmarshal(body, &user)
-	if err != nil {
-		return
-	}
-
 	return
 }
 
@@ -120,10 +104,6 @@ func (t *Twitter) Unfollow(username string) (user User, err error) {
 	}
 
 	err = json.Unmarshal(body, &user)
-	if err != nil {
-		return
-	}
-
 	return
 }
 
@@ -143,10 +123,6 @@ func (t *Twitter) Retweet(id int64) (tweet Tweet, err error) {
 	}
 
 	err = json.Unmarshal(body, &tweet)
-	if err != nil {
-		return
-	}
-
 	return
 }
 
@@ -166,10 +142,6 @@ func (t *Twitter) Destroy(id int64) (tweet Tweet, err error) {
 	}
 
 	err = json.Unmarshal(body, &tweet)
-	if err != nil {
-		return
-	}
-
 	return
 }
 
@@ -205,10 +177,6 @@ func (t *Twitter) GetRateLimitStatus() (status RateLimitStatus, err error) {
 	}
 
 	err = json.Unmarshal(body, &status)
-	if err != nil {
-		return
-	}
-
 	return
 }
 
@@ -224,10 +192,6 @@ func (t *Twitter) GetTotals() (totals Totals, err error) {
 	}
 
 	err = json.Unmarshal(body, &totals)
-	if err != nil {
-		return
-	}
-
 	return
 }
 
@@ -326,10 +290,6 @@ func (t *Twitter) LookupUsersById(ids []int64) (users []User, err error) {
 	}
 
 	err = json.Unmarshal(body, &users)
-	if err != nil {
-		return
-	}
-
 	return
 }
 
@@ -350,10 +310,6 @@ func (t *Twitter) GetRetweetsOfMe() (tweets []Tweet, err error) {
 	}
 
 	err = json.Unmarshal(body, &tweets)
-	if err != nil {
-		return
-	}
-
 	return
 }
 
