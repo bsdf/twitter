@@ -59,7 +59,7 @@ func (t *Twitter) generateOAuthHeader(m *RestMethod) string {
 }
 
 // Generates an OAuth signature base string to be signed
-func (t *Twitter) generateSignatureBase(m *RestMethod) string {
+func (t *Twitter) generateSignatureBase(m *RestMethod) (sig string) {
 	var buffer bytes.Buffer
 
 	// create OAuth params
@@ -97,18 +97,17 @@ func (t *Twitter) generateSignatureBase(m *RestMethod) string {
 		buffer.WriteString(encode(fmt.Sprintf("%s=%s&", v, m.Params[v])))
 	}
 
-	var out string
 	if m.Data != "" {
 		// append Data to buffer
 		buffer.WriteString(encode(m.Data))
-		out = buffer.String()
+		sig = buffer.String()
 	} else {
 		// remove trailing %26 (&)
-		out = buffer.String()
-		out = out[:len(out)-3]
+		sig = buffer.String()
+		sig = sig[:len(sig)-3]
 	}
 	// return signature base
-	return out
+	return
 }
 
 // Turns url-style query string into a map
