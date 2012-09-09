@@ -23,11 +23,6 @@ import (
 	"strings"
 )
 
-const (
-	publicTimelineURL = "http://api.twitter.com/1/statuses/public_timeline.json"
-	userStatusURL     = "https://api.twitter.com/1/statuses/user_timeline.json?screen_name=%s"
-)
-
 type Twitter struct {
 	ConsumerKey      string
 	ConsumerSecret   string
@@ -44,21 +39,15 @@ func New(consumerKey, consumerSecret, oauthToken, oauthTokenSecret string) *Twit
 	}
 }
 
-// Returns Twitter's public timeline
-func (t *Twitter) GetPublicTimeline() (tweets []Tweet, err error) {
-	body, err := getResponseBody(publicTimelineURL)
-	if err != nil {
-		return
-	}
-
-	err = json.Unmarshal(body, &tweets)
-	return
-}
-
 // Retrieves a user's timeline
 func (t *Twitter) GetUserTimeline(screenName string) (tweets []Tweet, err error) {
-	url := fmt.Sprintf(userStatusURL, screenName)
-	body, err := getResponseBody(url)
+	url := fmt.Sprintf("https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=%s", screenName)
+	method := &RestMethod{
+		Url:    url,
+		Method: "GET",
+	}
+
+	body, err := t.sendRestRequest(method)
 	if err != nil {
 		return
 	}

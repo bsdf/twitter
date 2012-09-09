@@ -81,18 +81,6 @@ func TestUserTimeline(t *testing.T) {
 	}
 }
 
-func TestPublicTimeline(t *testing.T) {
-	tweets, err := tw.GetPublicTimeline()
-	if err != nil {
-		t.Error("Error retrieving public timeline")
-		return
-	}
-	if len(tweets) < 1 {
-		t.Error("No tweets returned from public timeline:", err.Error())
-		return
-	}
-}
-
 func TestUserInfo(t *testing.T) {
 	const expected = "bsdf"
 	tweets, err := tw.GetUserTimeline(expected)
