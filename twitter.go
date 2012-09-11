@@ -185,21 +185,6 @@ func (t *Twitter) GetRateLimitStatus() (status RateLimitStatus, err error) {
 	return
 }
 
-func (t *Twitter) GetTotals() (totals Totals, err error) {
-	method := &RestMethod{
-		Url:    "https://api.twitter.com/1/account/totals.json",
-		Method: "GET",
-	}
-
-	body, err := t.sendRestRequest(method)
-	if err != nil {
-		return
-	}
-
-	err = json.Unmarshal(body, &totals)
-	return
-}
-
 func (t *Twitter) GetPrivacyPolicy() (policy string, err error) {
 	method := &RestMethod{
 		Url:    "https://api.twitter.com/1/legal/privacy.json",

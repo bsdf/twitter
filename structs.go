@@ -101,13 +101,6 @@ type RateLimitStatus struct {
 	HourlyLimit      int    `json:"hourly_limit"`
 }
 
-type Totals struct {
-	Friends   int
-	Updates   int
-	Followers int
-	Favorites int
-}
-
 type DirectMessage struct {
 	Id                  int64
 	CreatedAt           string `json:"created_at"`
