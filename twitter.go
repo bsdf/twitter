@@ -28,6 +28,7 @@ type Twitter struct {
 	ConsumerSecret   string
 	OAuthToken       string
 	OAuthTokenSecret string
+	DebugMode        bool
 }
 
 func New(consumerKey, consumerSecret, oauthToken, oauthTokenSecret string) *Twitter {
@@ -36,6 +37,7 @@ func New(consumerKey, consumerSecret, oauthToken, oauthTokenSecret string) *Twit
 		consumerSecret,
 		oauthToken,
 		oauthTokenSecret,
+		false,
 	}
 }
 

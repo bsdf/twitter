@@ -62,6 +62,10 @@ func loadConfiguration() {
 	}
 }
 
+func debug(b bool) {
+	tw.DebugMode = b
+}
+
 func TestBadUsername(t *testing.T) {
 	_, err := tw.GetUserTimeline("USERNAME_DONT_EXIST")
 	if err == nil {
