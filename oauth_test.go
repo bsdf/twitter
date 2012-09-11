@@ -160,11 +160,18 @@ func TestUnfollow(t *testing.T) {
 }
 
 func TestRetweet(t *testing.T) {
+	debug(true)
+	defer debug(false)
 	var tweetId int64 = 221281838440783875
 
-	_, err := tw.Retweet(tweetId)
+	tweet, err := tw.Retweet(tweetId)
 	if err != nil {
 		t.Error("Error retweeting:", err.Error())
+	}
+
+	if tweet.User.ScreenName != "bsdf" {
+		t.Error("Request returned, but tweet returned incorrectly")
+		return
 	}
 }
 
@@ -189,31 +196,18 @@ func TestSearch(t *testing.T) {
 	}
 }
 
-func TestRateLimitStatus(t *testing.T) {
-	status, err := tw.GetRateLimitStatus()
-	if err != nil {
-		t.Error("Error retrieving rate limit status:", err.Error())
-		return
-	}
+// func TestRateLimitStatus(t *testing.T) {
+// 	status, err := tw.GetRateLimitStatus()
+// 	if err != nil {
+// 		t.Error("Error retrieving rate limit status:", err.Error())
+// 		return
+// 	}
 
-	if status.ResetTime == "" {
-		t.Error("Rate limit status returned ok, but was not unmarshalled correctly")
-		return
-	}
-}
-
-func TestGetTotals(t *testing.T) {
-	totals, err := tw.GetTotals()
-	if err != nil {
-		t.Error("Error getting totals:", err.Error())
-		return
-	}
-
-	if totals.Updates == 0 {
-		t.Error("Totals request returned ok, but was not unmarshalled correctly")
-		return
-	}
-}
+// 	if status.ResetTime == "" {
+// 		t.Error("Rate limit status returned ok, but was not unmarshalled correctly")
+// 		return
+// 	}
+// }
 
 func TestGetPrivacyPolicy(t *testing.T) {
 	policy, err := tw.GetPrivacyPolicy()
@@ -252,7 +246,7 @@ func TestGetUserFriends(t *testing.T) {
 }
 
 func TestLookupUsersById(t *testing.T) {
-	userIds := []int64{76395009, 22062197}
+	userIds := []int64{76395009, 14114455}
 	users, err := tw.LookupUsersById(userIds)
 	if err != nil {
 		t.Error("Error retrieving users:", err.Error())
@@ -261,13 +255,6 @@ func TestLookupUsersById(t *testing.T) {
 	if len(users) != 2 {
 		t.Error("Wrong number of users returned.")
 		return
-	}
-}
-
-func TestGetRetweetsOfMe(t *testing.T) {
-	_, err := tw.GetRetweetsOfMe()
-	if err != nil {
-		t.Error("Error fetching retweets of me (you):", err.Error())
 	}
 }
 
@@ -280,9 +267,15 @@ func TestGetDirectMessages(t *testing.T) {
 }
 
 func TestSendDirectMessage(t *testing.T) {
-	dm, err := tw.SendDirectMessage("MEMEMEMEMES", "HIHIHIHIHI!!")
+	user := "MEMEMEMEMES"
+	dm, err := tw.SendDirectMessage(user, "HIHIHIHIHI!!")
 	if err != nil {
 		t.Error("Error sending DM:", err.Error())
+		return
+	}
+
+	if dm.Sender.ScreenName != user {
+		t.Error("Request completed, but incorrect data was returned")
 		return
 	}
 
@@ -291,8 +284,14 @@ func TestSendDirectMessage(t *testing.T) {
 }
 
 func TestDeleteDirectMessage(t *testing.T) {
-	_, err := tw.DeleteDirectMessage(dmId)
+	user := "MEMEMEMEMES"
+	dm, err := tw.DeleteDirectMessage(dmId)
 	if err != nil {
 		t.Error("Error deleting DM:", err.Error())
+	}
+
+	if dm.Sender.ScreenName != user {
+		t.Error("Request completed, but incorrect data was returned")
+		return
 	}
 }
