@@ -170,20 +170,20 @@ func (t *Twitter) Search(query string) (tweets []Tweet, err error) {
 }
 
 // Returns current RateLimitStatus or error
-func (t *Twitter) GetRateLimitStatus() (status RateLimitStatus, err error) {
-	method := &RestMethod{
-		Url:    "https://api.twitter.com/1/account/rate_limit_status.json",
-		Method: "GET",
-	}
+// func (t *Twitter) GetRateLimitStatus() (status RateLimitStatus, err error) {
+// 	method := &RestMethod{
+// 		Url:    "https://api.twitter.com/1.1/application/rate_limit_status.json",
+// 		Method: "GET",
+// 	}
 
-	body, err := t.sendRestRequest(method)
-	if err != nil {
-		return
-	}
+// 	body, err := t.sendRestRequest(method)
+// 	if err != nil {
+// 		return
+// 	}
 
-	err = json.Unmarshal(body, &status)
-	return
-}
+// 	err = json.Unmarshal(body, &status)
+// 	return
+// }
 
 func (t *Twitter) GetPrivacyPolicy() (policy string, err error) {
 	method := &RestMethod{
