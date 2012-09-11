@@ -122,6 +122,10 @@ func (t *Twitter) generateSignatureBase(m *RestMethod) (sig string) {
 		sig = buffer.String()
 		sig = sig[:len(sig)-3]
 	}
+
+	// DEBUG
+	// fmt.Printf("Signature Base:\n%s\n\n", sig)
+
 	// return signature base
 	return
 }
@@ -183,6 +187,13 @@ func (t *Twitter) sendRestRequest(m *RestMethod) (body []byte, err error) {
 	req, _ := http.NewRequest(m.Method, m.Url, strings.NewReader(m.Data))
 	header := t.generateOAuthHeader(m)
 
+	// DEBUG
+	// fmt.Printf("%s %s\n\n", m.Method, m.Url)
+	// fmt.Printf("OAuth Header:\n%s\n\n", header)
+	// if m.Data != "" {
+	// 	fmt.Printf("Data:\n%s\n\n", m.Data)
+	// }
+
 	req.Header.Add("Authorization", header)
 
 	resp, err := client.Do(req)
@@ -194,6 +205,9 @@ func (t *Twitter) sendRestRequest(m *RestMethod) (body []byte, err error) {
 	if err != nil {
 		return
 	}
+
+	// DEBUG
+	// fmt.Printf("Response:\n%s\n\n", body)
 
 	// sanitize json
 	// remove nulls
