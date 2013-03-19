@@ -171,6 +171,7 @@ func (t *Twitter) generateOAuthSignature(signatureBase string) string {
 // Wrapper for url.QueryEscape
 func encode(str string) string {
 	esc := url.QueryEscape(str)
+	esc = strings.Replace(esc, "*", "%2A", -1)
 	return strings.Replace(esc, "+", "%20", -1)
 }
 
@@ -184,7 +185,6 @@ func getNonce() string {
 
 func (t *Twitter) sendRestRequest(m *RestMethod) (body []byte, err error) {
 	client := &http.Client{}
-
 	req, _ := http.NewRequest(m.Method, m.Url, strings.NewReader(m.Data))
 	header := t.generateOAuthHeader(m)
 
@@ -197,6 +197,10 @@ func (t *Twitter) sendRestRequest(m *RestMethod) (body []byte, err error) {
 	}
 
 	req.Header.Add("Authorization", header)
+
+	if m.Method == "POST" {
+		req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+	}
 
 	resp, err := client.Do(req)
 	if err != nil {
