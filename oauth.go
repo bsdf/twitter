@@ -65,7 +65,7 @@ func (t *Twitter) generateOAuthHeader(m *RestMethod) string {
 	i := 0
 	var params = make([]string, len(m.Params))
 	for _, v := range sortedKeys {
-		if v[:6] == "oauth_" {
+		if len(v) >= 6 && v[:6] == "oauth_" {
 			params[i] = fmt.Sprintf(`%s="%s"`, v, encode(m.Params[v]))
 			i++
 		}
