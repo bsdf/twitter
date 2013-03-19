@@ -295,3 +295,16 @@ func TestDeleteDirectMessage(t *testing.T) {
 		return
 	}
 }
+
+func TestGetUser(t *testing.T) {
+	userName := "MEMEMEMEMES"
+	user, err := tw.GetUser(userName)
+	if err != nil {
+		t.Error("Error retrieving user.", err.Error())
+	}
+
+	if user.ScreenName != userName {
+		t.Error("Request returned, but username was not returned correctly")
+		return
+	}
+}

@@ -332,3 +332,19 @@ func (t *Twitter) DeleteDirectMessage(id int64) (dm DirectMessage, err error) {
 	err = json.Unmarshal(body, &dm)
 	return
 }
+
+func (t *Twitter) GetUser(userName string) (user User, err error) {
+	url := fmt.Sprintf("http://api.twitter.com/1.1/users/show.json?screen_name=%s", userName)
+	method := &RestMethod{
+		Url:    url,
+		Method: "GET",
+	}
+
+	body, err := t.sendRestRequest(method)
+	if err != nil {
+		return
+	}
+
+	err = json.Unmarshal(body, &user)
+	return
+}
