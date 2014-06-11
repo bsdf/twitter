@@ -155,9 +155,14 @@ func (t *Twitter) Destroy(id int64) (tweet Tweet, err error) {
 // Destroys a tweet based upon its id
 // Returns the Tweet if successful, error if unsuccessful
 func (t *Twitter) Search(query string) (tweets []Tweet, err error) {
-	url := fmt.Sprintf("https://search.twitter.com/search.json?q=%s", encode(query))
+	url := fmt.Sprintf("https://api.twitter.com/1.1/search/tweets.json?q=%s", encode(query))
 
-	body, err := getResponseBody(url)
+	method := &RestMethod{
+		Url:    url,
+		Method: "GET",
+	}
+
+	body, err := t.sendRestRequest(method)
 	if err != nil {
 		return
 	}
@@ -334,7 +339,7 @@ func (t *Twitter) DeleteDirectMessage(id int64) (dm DirectMessage, err error) {
 }
 
 func (t *Twitter) GetUser(userName string) (user User, err error) {
-	url := fmt.Sprintf("http://api.twitter.com/1.1/users/show.json?screen_name=%s", userName)
+	url := fmt.Sprintf("https://api.twitter.com/1.1/users/show.json?screen_name=%s", userName)
 	method := &RestMethod{
 		Url:    url,
 		Method: "GET",

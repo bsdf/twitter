@@ -91,7 +91,7 @@ type User struct {
 
 type SearchResult struct {
 	Query   string
-	Results []Tweet
+	Results []Tweet `json:"statuses"`
 }
 
 type RateLimitStatus struct {
