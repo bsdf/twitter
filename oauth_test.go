@@ -160,11 +160,12 @@ func TestUnfollow(t *testing.T) {
 }
 
 func TestRetweet(t *testing.T) {
-	var tweetId int64 = 474924020346159104
+	var tweetId int64 = 221281838440783875
 
 	tweet, err := tw.Retweet(tweetId)
 	if err != nil {
 		t.Error("Error retweeting:", err.Error())
+		return
 	}
 
 	if tweet.User.ScreenName != "MEMEMEMEMES" {
@@ -302,6 +303,7 @@ func TestGetUser(t *testing.T) {
 	user, err := tw.GetUser(userName)
 	if err != nil {
 		t.Error("Error retrieving user.", err.Error())
+		return
 	}
 
 	if user.ScreenName != userName {

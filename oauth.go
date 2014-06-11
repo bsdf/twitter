@@ -49,7 +49,7 @@ type RestMethod struct {
 }
 
 type TwitterError struct {
-	Error   string
+	Error   string `json:"errors"`
 	Request string
 }
 
@@ -222,7 +222,7 @@ func (t *Twitter) sendRestRequest(m *RestMethod) (body []byte, err error) {
 	// remove any trailing commas
 	body = commaRegexp.ReplaceAll(body, []byte("$1"))
 
-	if len(body) >= 8 && string(body)[:8] == `{"error"` {
+	if len(body) >= 8 && string(body)[:7] == `{"error` {
 		var twitterError TwitterError
 		json.Unmarshal(body, &twitterError)
 
