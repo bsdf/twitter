@@ -160,19 +160,20 @@ func TestUnfollow(t *testing.T) {
 }
 
 func TestRetweet(t *testing.T) {
-	debug(true)
-	defer debug(false)
-	var tweetId int64 = 221281838440783875
+	var tweetId int64 = 474924020346159104
 
 	tweet, err := tw.Retweet(tweetId)
 	if err != nil {
 		t.Error("Error retweeting:", err.Error())
 	}
 
-	if tweet.User.ScreenName != "bsdf" {
+	if tweet.User.ScreenName != "MEMEMEMEMES" {
 		t.Error("Request returned, but tweet returned incorrectly")
 		return
 	}
+
+	// undo retweet after
+	tw.Destroy(tweet.Id)
 }
 
 func TestDestroy(t *testing.T) {
